@@ -1,0 +1,134 @@
+@media (min-width: 1200px){
+  body {
+  background-image: url(bg.jpeg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  margin: 0;
+}
+.right-panel {
+  margin-top: 90px;
+  margin-bottom: 90px;
+  background-color: rgb(255, 255, 255);
+  border-bottom-left-radius: 100px;
+  border-top-right-radius: 100px;
+  box-shadow: 100px 0px 200px 0px rgba(0, 0, 0, 0.5);
+  padding-right: 50px;
+  padding-left: 50px;
+  padding-top: 20px;
+
+}
+h1 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 2rem;
+  text-align: center;
+  color: #0c0f45;
+}
+.input {
+  width: 100%;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  color: #0c0f45;
+}
+.input:focus {
+  outline: #0c0f45;
+}
+.register-button {
+  height: 50px;
+  width: 150px;
+  background-color: #1976d2;
+  color: white;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: medium;
+}
+.register-button:hover {
+  border-color: #1976d2;
+  background-color: #ffffff;
+  margin: 8px 0;
+  border: 15px;
+}
+.login-button {
+  height: 50px;
+  width: 150px;
+  background-color: #4caf50;
+  color: white;
+  margin: 8px 0;
+  border: 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: large;
+}
+.login-button:hover {
+  border-color: #45a049;
+  background-color: #ffffff;
+  border: 15px;
+  color: #0c0f45;
+}
+.welcome {
+  text-align: center;
+  margin-top: 20%;
+  
+}
+.welcome p {
+  font-size: 2rem;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-left: -65px;
+}
+.register .register-button {
+  text-align: center;
+  margin-top: 5%;
+}
+.register p {
+  font-size: 1rem;
+  color: #000000;
+}
+.logo {
+  background-image: url(issd.png);
+  background-size: cover;
+  background-position: center;
+  height: 100px;
+  width: 300px;
+  margin-top: 100px;
+  margin-left: 200px;
+  margin-bottom: 120px;
+}
+.buttons {
+  margin-top: 20px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.register-but{
+  height: 50px;
+  width: 150px;
+  background-color: #4caf50;
+  color: white;
+  margin: 8px 0;
+  border: 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: large;
+}}
+
+
+
+
+
+  
