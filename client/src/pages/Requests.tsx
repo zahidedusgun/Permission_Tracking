@@ -1,25 +1,39 @@
-import React from "react";
-import Box from "@mui/material/Box";
-
+import React, { useState } from "react";
+import Form from "./sub_components/Form";
+import Table from "./sub_components/Table";
+import { Modal } from "antd";
+import { Tooltip } from "antd";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
 function Requests() {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   return (
-    <>
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        padding={2}
-        margin={1}
-        sx={{
-          backgroundColor: "lightblue",
-          borderRadius: 4,
-          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-        }}
+    <div>
+      <Tooltip placement="right" title={"Talep Oluştur"}>
+        <Fab color="primary" aria-label="add" onClick={showModal}>
+          <AddIcon />
+        </Fab>
+      </Tooltip>
+
+      <Modal
+        title="İzin Talebi Oluştur"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={"    "}
       >
-        <h2>Requests</h2>
-      </Box>
-    </>
+        <Form />
+      </Modal>
+      <Table />
+    </div>
   );
 }
 
