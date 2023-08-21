@@ -98,26 +98,36 @@ export default function Sidenav() {
   const [open, setOpen] = useState(true);
   const [menuData, setMenuData] = useState("Home");
 
- 
   const handleDrawerClose = () => {
     setOpen(false);
   };
 
   return (
-    <Box sx={{ display: "flex", backgroundColor:"#ffffff",  width: "100vw", height: "100vh",  overflowX: "hidden" }}>
+    <Box sx={{ display: "flex", backgroundColor: "#ffffff", height: "100vh" }}>
       <CssBaseline />
-      <AppBar position="fixed" elevation={4} sx={{backgroundColor:"#0B2C5B", color:"white"}}>
+      <AppBar
+        position="fixed"
+        elevation={4}
+        sx={{ backgroundColor: "#0B2C5B", color: "white" }}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={()=>{setOpen(!open)}}
+            onClick={() => {
+              setOpen(!open);
+            }}
             edge="start"
           >
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-          <img src={require('./issd.png')} alt="ISSD Logo" height="65" style={{marginLeft:"650px"}}/>
+            <img
+              src={require("./issd.png")}
+              alt="ISSD Logo"
+              height="65"
+              style={{ marginLeft: "650px" }}
+            />
           </Typography>
         </Toolbar>
       </AppBar>
@@ -156,19 +166,76 @@ export default function Sidenav() {
               >
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText 
-              sx={{ display: open ? "initial" : "none" }}
-              primary="Anasayfa" />
+              <ListItemText
+                sx={{ display: open ? "initial" : "none" }}
+                primary="Anasayfa"
+              />
             </ListItemButton>
           </ListItem>
-
+          <ListItem
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => setMenuData("Requests")}
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "block",
+                px: 3,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <AddCircleIcon/>
+              </ListItemIcon>
+              <ListItemText
+                sx={{ display: open ? "initial" : "none" }}
+                primary="İzin Talepleri"
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => setMenuData("Profile")}
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "block",
+                px: 3
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <AccountCircleIcon/>
+              </ListItemIcon>
+              <ListItemText
+                sx={{ display: open ? "initial" : "none" }}
+                primary="Profil"
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
         <Divider />
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, display: open ? "block" : "none"  }}>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3 }}
+      >
         {menuData === "Requests" && <Requests />}
         {menuData === "Home" && <Home />}
-        {menuData === "Profil" && <Profile />}
+        {menuData === "Profile" && <Profile />}
       </Box>
     </Box>
   );
