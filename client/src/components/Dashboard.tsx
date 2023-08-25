@@ -17,7 +17,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setAuth }) => {
         </Button>
         {"Çıkış"}
       </Box>{" "}
-      <Sidenav/>
+      <Sidenav />
     </Fragment>
   );
 };
