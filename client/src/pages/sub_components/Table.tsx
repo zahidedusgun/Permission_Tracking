@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Table as AntTable, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
+import { Button } from "antd";
 
 interface DataType {
   key: string;
@@ -55,6 +56,22 @@ const columns: ColumnsType<DataType> = [
     dataIndex: "posting_date",
     key: "posting_date",
   },
+  {
+    title: "Sil",
+    dataIndex: "delete",
+    key: "delete",
+    render: (text, record) => (
+      <Button type="link" danger style={{ color: "white", backgroundColor: "red", borderColor: "red" }} >
+        Delete
+      </Button>
+    ),
+  },
+  {
+    title: "Düzenle",
+    dataIndex: "edit",
+    key: "edit",
+  },
+
 ];
 
 function Table() {
