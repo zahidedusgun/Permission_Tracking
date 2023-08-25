@@ -1,0 +1,27 @@
+.delete-button {
+  color: white;
+  background-color: red;
+  border-color: red;
+}
+
+.delete-button:hover {
+  color: red;
+  background-color: white;
+}
+
+.edit-button {
+  color: white;
+  background-color: green;
+  border-color: green;
+}
+
+.edit-button:hover {
+  color: green;
+  background-color: white;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}

@@ -7,6 +7,7 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 function Requests() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [refreshData, setRefreshData] = useState(false);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -14,6 +15,10 @@ function Requests() {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+  const handleDataSubmit = () => {
+    setIsModalVisible(false);
+    setRefreshData(!refreshData); 
   };
 
   return (
@@ -30,9 +35,9 @@ function Requests() {
         onCancel={handleCancel}
         footer={"    "}
       >
-        <Form />
+        <Form onDataSubmit={handleDataSubmit}/>
       </Modal>
-      <Table />
+      <Table  refreshData={refreshData}/>
     </div>
   );
 }

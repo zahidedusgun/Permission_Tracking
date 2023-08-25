@@ -19,9 +19,10 @@ import ListItemText from "@mui/material/ListItemText";
 import HomeIcon from "@mui/icons-material/Home";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import Home from "../pages/Home";
-import Profile from "../pages/Profile";
-import Requests from "../pages/Requests";
+import HMHome from "./HMHome"
+// import Profile from ".../pages/sub_components/Profile";
+// import Requests from "../pages/Requests";
+
 
 const drawerWidth = 240;
 
@@ -93,7 +94,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function Sidenav() {
+export default function HMSidenav() {
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const [menuData, setMenuData] = useState("Home");
@@ -123,7 +124,7 @@ export default function Sidenav() {
           </IconButton>
           <Typography variant="h6" noWrap component="div">
             <img
-              src={require("./issd.png")}
+              src={require("./HMissd.png")}
               alt="ISSD Logo"
               height="65"
               style={{ marginLeft: "650px" }}
@@ -233,9 +234,9 @@ export default function Sidenav() {
         component="main"
         sx={{ flexGrow: 1, p: 3 }}
       >
-        {menuData === "Requests" && <Requests />}
-        {menuData === "Home" && <Home />}
-        {menuData === "Profile" && <Profile />}
+        {/* {menuData === "Requests" && <Requests />} */}
+        {menuData === "Home" && <HMHome />}
+        {/* {menuData === "Profile" && <Profile />} */}
       </Box>
     </Box>
   );

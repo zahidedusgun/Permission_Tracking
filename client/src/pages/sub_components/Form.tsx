@@ -1,35 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, DatePicker, Space, Select, Input } from "antd";
 import { DatePickerProps } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import { v4 as uuidv4 } from "uuid";
+import { Alert } from "@mui/material";
 const { TextArea } = Input;
 
-function Form() {
-  const [startDate, setStartDate] = React.useState<Dayjs | null>(null);
-  const [endDate, setEndDate] = React.useState<Dayjs | null>(null);
-  const [location, setLocation] = React.useState<string>("");
-  const [type, setType] = React.useState<string>("");
-  const [description, setDescription] = React.useState<string>("");
+interface FormProps {
+  onDataSubmit: () => void;
+}
+
+function Form({ onDataSubmit }: FormProps) {
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+  const [location, setLocation] = useState<string>("");
+  const [type, setType] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
 
   const onChangeDate: DatePickerProps["onChange"] = (date, dateString) => {
     if (date) {
+   
       const selectedDate = dayjs(date);
       setStartDate(selectedDate);
       setEndDate(selectedDate);
-      console.log(selectedDate);
-    } else {
-      console.log("date is null");
     }
   };
-
+  const onOk = (value: DatePickerProps['value'] | DatePickerProps['value']) => {
+    console.log('onOk: ', value);
+  };
   const onChange = (value: string) => {
-    console.log(`selected ${value}`);
     setType(value);
   };
 
   const onSearch = (value: string) => {
     console.log("search:", value);
+  };
+  const resetForm = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setLocation("");
+    setType("");
+    setDescription("");
   };
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -54,6 +65,10 @@ function Form() {
 
       if (response.ok) {
         console.log("Kayıt başarıyla eklendi.");
+        alert ("Kayıt başarıyla eklendi.");
+
+        onDataSubmit();
+        resetForm();
       } else {
         console.log("Kayıt eklenirken bir hata oluştu.");
       }
@@ -61,13 +76,12 @@ function Form() {
       console.error((err as Error).message);
       console.log("Kayıt eklenirken bir hata oluştu.");
     }
-    console.log("submitted");
   };
 
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <div
+               <div
           style={{
             display: "flex",
             flexDirection: "column",
@@ -85,7 +99,7 @@ function Form() {
               {"Tarih Aralığını Seçiniz:"}
             </div>
             <Space direction="horizontal" size={12}>
-              <DatePicker placeholder="Başlangıç" onChange={onChangeDate} />
+              <DatePicker placeholder="Başlangıç" onChange={onChangeDate} onOk={onOk} />
               <DatePicker placeholder="Bitiş" onChange={onChangeDate} />
             </Space>
           </div>
@@ -96,7 +110,7 @@ function Form() {
             <Input
               placeholder="Lokasyon"
               value={location}
-              onChange={(e) => setLocation(e.target.value)} // Update the location state here
+              onChange={(e) => setLocation(e.target.value)}
               style={{ width: "40ch" }}
             />
           </div>
