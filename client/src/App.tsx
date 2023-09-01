@@ -40,7 +40,7 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            isAuthenticated ? (
+            !isAuthenticated ? (
               <Dashboard setAuth={setAuth} />
             ) : (
               <Navigate to="/login" />
@@ -54,16 +54,6 @@ function App() {
               <Login setAuth={setAuth} />
             ) : (
               <Navigate to="/dashboard" />
-            )
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            !isAuthenticated ? (
-              <Register setAuth={setAuth} />
-            ) : (
-              <Navigate to="/login" />
             )
           }
         />

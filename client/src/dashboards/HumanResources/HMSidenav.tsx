@@ -19,7 +19,9 @@ import ListItemText from "@mui/material/ListItemText";
 import HomeIcon from "@mui/icons-material/Home";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import BadgeIcon from '@mui/icons-material/Badge';
 import HMHome from "./HMHome";
+import HMEmployee from "./HMEmployee";
 // import Profile from ".../pages/sub_components/Profile";
 // import Requests from "../pages/Requests";
 
@@ -226,12 +228,40 @@ export default function HMSidenav() {
               />
             </ListItemButton>
           </ListItem>
+          <ListItem
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => setMenuData("HMEmployee")}
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "block",
+                px: 3,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <BadgeIcon />
+              </ListItemIcon>
+              <ListItemText
+                sx={{ display: open ? "initial" : "none" }}
+                primary="Çalışan Kaydı"
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
         <Divider />
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         {/* {menuData === "Requests" && <Requests />} */}
         {menuData === "Home" && <HMHome />}
+        {menuData === "HMEmployee" && <HMEmployee />}
         {/* {menuData === "Profile" && <Profile />} */}
       </Box>
     </Box>

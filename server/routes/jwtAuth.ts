@@ -10,10 +10,10 @@ const router = express.Router();
 // Registering
 router.post("/register", validInfo, async (req: Request, res: Response) => {
   try {
-    const { username, password, email, department } = req.body;
+    const { username, password, role } = req.body;
 
-    const users = await pool.query("SELECT * FROM users WHERE email = $1", [
-      email,
+    const users = await pool.query("SELECT * FROM users WHERE username = $1", [
+      username,
     ]);
 
     if (users.rows.length > 0) {
@@ -24,8 +24,8 @@ router.post("/register", validInfo, async (req: Request, res: Response) => {
     // const salt = await bcrypt.genSalt(saltRounds);
     // const bcryptPassword = await bcrypt.hash(password, salt);
     const newUser = await pool.query(
-      "INSERT INTO users (username, password, email, department) VALUES ($1, $2, $3, $4) RETURNING *",
-      [username, password, email, department]
+      "INSERT INTO users (username, password, role) VALUES ($1, $2, $3) RETURNING *",
+      [username, password, role]
     );
     console.log(newUser.rows[0]);
     res.json(newUser.rows[0]);
@@ -43,19 +43,29 @@ router.post("/register", validInfo, async (req: Request, res: Response) => {
     res.status(500).send("Server error");
   }
 });
-
+//Get Registered Users
+router.get("/register", async (req, res) => {
+  try {
+    const allUsers = await pool.query("SELECT * FROM users");
+    res.json(allUsers.rows);
+  } catch (err) {
+    console.error((err as Error).message);
+    console.error(err);
+    res.status(500).json({ error: "get hatası" });
+  }
+});
 // Logging in
 router.post("/login", validInfo, async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
     const user = await pool.query(
-      "SELECT * FROM users WHERE email = $1 AND password = $2",
-      [email, password]
+      "SELECT * FROM users WHERE username = $1 AND password = $2",
+      [username, password]
     );
 
     if (user.rows.length === 0) {
-      return res.status(401).json("Password or Email is incorrect");
+      return res.status(401).json("Password or Username is incorrect");
     }
 
     const token = jwtGenerator(user.rows[0].id);

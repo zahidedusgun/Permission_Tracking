@@ -3,14 +3,13 @@ CREATE DATABESE jwt_sql;
 CREATE TABLE users (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
-    email VARCHAR(50) NOT NULL,
     password VARCHAR(50) NOT NULL,
-    deparment VARCHAR(50) NOT NULL,
+    role VARCHAR(25) NOT NULL,
 )
 INSERT INTO
-    users (username, email, password, deparment)
+    users (username, password, role)
 VALUES
-    ('admin', 'zahi@gmail.com', '123456', 'ArGe' );
+    ('zahide', '123456', 'role' );
 
 CREATE TABLE requests (
     request_id,

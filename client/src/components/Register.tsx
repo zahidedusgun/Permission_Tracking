@@ -50,6 +50,7 @@ const Register: React.FC<LoginProps> = ({ setAuth }) => {
       setAuth(true);
     } catch (err) {
       console.error((err as Error).message);
+
     }
   };
 

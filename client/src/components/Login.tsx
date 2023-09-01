@@ -6,7 +6,6 @@ import { TextField } from "@mui/material";
 import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import "bootstrap/dist/css/bootstrap.min.css"; 
-import { Link } from "react-router-dom";
 import EmailIcon from "@mui/icons-material/Email";
 
 interface LoginProps {
@@ -15,11 +14,11 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
-  const { email, password } = inputs;
+  const { username, password } = inputs;
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -28,7 +27,7 @@ const Login: React.FC<LoginProps> = ({ setAuth }) => {
   const onSubmitForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const body = { email, password };
+      const body = { username, password };
       const response = await fetch("http://localhost:8000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -75,12 +74,12 @@ const Login: React.FC<LoginProps> = ({ setAuth }) => {
                 >
                   <EmailIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
                   <TextField
-                    type="email"
-                    name="email"
-                    value={email}
+                    type="username"
+                    name="username"
+                    value={username}
                     onChange={onChange}
                     id="input-with-sx"
-                    label="Email Giriniz"
+                    label="Kullanıcı Adınızı Giriniz"
                     variant="standard"
                     className="input"
                   />
@@ -110,7 +109,6 @@ const Login: React.FC<LoginProps> = ({ setAuth }) => {
                   <button className="login-button" type="submit">
                     Giriş <LoginOutlinedIcon />
                   </button>
-                  Kayıt olmak için <Link to="/register">tıklayınız</Link>
                 </div>
               </form>
             </div>

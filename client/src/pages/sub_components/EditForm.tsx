@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button, DatePicker, Space, Select, Input, Modal } from "antd";
 import dayjs, { Dayjs } from "dayjs";
-import { v4 as uuidv4 } from "uuid";
 
 const { TextArea } = Input;
 
@@ -28,14 +27,6 @@ function EditForm({ data, onDataEdit }: EditFormProps) {
 
   const onChange = (value: string) => {
     setType(value);
-  };
-
-  const resetForm = () => {
-    setStartDate(null);
-    setEndDate(null);
-    setLocation("");
-    setType("");
-    setDescription("");
   };
 
   const handleEdit = async () => {
