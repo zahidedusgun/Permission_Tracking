@@ -25,7 +25,7 @@ h1 {
   text-align: center;
   color: #0c0f45;
 }
-.input {
+/* .input {
   width: 100%;
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
@@ -34,7 +34,7 @@ h1 {
 }
 .input:focus {
   outline: #0c0f45;
-}
+} */
 .register-button {
   height: 50px;
   width: 150px;

@@ -11,7 +11,6 @@ import Employee from "./dashboards/Employee";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [selectedButton, setSelectedButton] = useState<string | null>(null);
 
   const setAuth = (boolean: boolean) => {
     setIsAuthenticated(boolean);

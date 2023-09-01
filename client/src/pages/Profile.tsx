@@ -1,24 +1,30 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Row, Col } from "antd";
+import Card from "antd/es/card/Card";
+import Divider from "antd/es/divider";
 
 function Profile() {
   return (
     <>
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        padding={2}
-        margin={1}
-        sx={{
-          backgroundColor: "lightblue",
-          borderRadius: 4,
-          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <h2>Profile</h2>
-      </Box>
+      <Row gutter={16}>
+        <Col span={8}>
+        <Card title="İzin Gün Sayısı" bordered={false} className="custom-card">
+      <div className="day-number">
+        <span className="effect">14</span>
+        <div className="day-text">Gün</div>
+      </div>
+      <Divider type="vertical" className="vertical-line" />
+      <p className="total-days">Kullanılan Günler: 10</p>
+      <p className="total-days">Toplam Gün: 30</p>
+    </Card>
+        </Col>
+        <Col span={16}>
+          <Card title="İzin Türleri" bordered={false}>
+            Kabul edilen izin türler burada görünecek..
+          </Card>
+        </Col>
+   
+      </Row>
     </>
   );
 }
