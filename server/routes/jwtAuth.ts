@@ -6,9 +6,11 @@ import authorization from "../middleware/authorization";
 
 const validInfo = require("../middleware/validInfo");
 const router = express.Router();
+
+// Registering
 router.post("/register", validInfo, async (req: Request, res: Response) => {
   try {
-    const { username, password, email } = req.body;
+    const { username, password, email, department } = req.body;
 
     const users = await pool.query("SELECT * FROM users WHERE email = $1", [
       email,
@@ -22,11 +24,11 @@ router.post("/register", validInfo, async (req: Request, res: Response) => {
     // const salt = await bcrypt.genSalt(saltRounds);
     // const bcryptPassword = await bcrypt.hash(password, salt);
     const newUser = await pool.query(
-      "INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *",
-      [username, email, password]
+      "INSERT INTO users (username, password, email, department) VALUES ($1, $2, $3, $4) RETURNING *",
+      [username, password, email, department]
     );
     console.log(newUser.rows[0]);
-    
+    res.json(newUser.rows[0]);
 
     if (!newUser.rows[0]) {
       return res.status(500).send("Failed to register new user");
@@ -42,6 +44,7 @@ router.post("/register", validInfo, async (req: Request, res: Response) => {
   }
 });
 
+// Logging in
 router.post("/login", validInfo, async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;

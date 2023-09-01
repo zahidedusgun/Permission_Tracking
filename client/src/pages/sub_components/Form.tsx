@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { Button, DatePicker, Space, Select, Input } from "antd";
+import { Button, DatePicker, Space, Select, Input, TimePicker } from "antd";
 import { DatePickerProps } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import { v4 as uuidv4 } from "uuid";
-import { Alert } from "@mui/material";
+import Alert from "antd/es/alert/Alert";
+import { Snackbar } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
+
 const { TextArea } = Input;
 
 interface FormProps {
@@ -16,36 +19,52 @@ function Form({ onDataSubmit }: FormProps) {
   const [location, setLocation] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string>("");
+  const [startTime, setStartTime] = useState<Dayjs | null>(null);
+  const [endTime, setEndTime] = useState<Dayjs | null>(null);
+  const [alertVisible, setAlertVisible] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string>("");
+  const [successVisible, setSuccessVisible] = useState<boolean>(false);
+  const [successMessage, setSuccessMessage] = useState<string>("");
 
   const onChangeDate: DatePickerProps["onChange"] = (date, dateString) => {
     if (date) {
-   
       const selectedDate = dayjs(date);
       setStartDate(selectedDate);
       setEndDate(selectedDate);
     }
   };
-  const onOk = (value: DatePickerProps['value'] | DatePickerProps['value']) => {
-    console.log('onOk: ', value);
-  };
+
   const onChange = (value: string) => {
     setType(value);
+    setSelectedType(value);
   };
 
   const onSearch = (value: string) => {
     console.log("search:", value);
   };
+
   const resetForm = () => {
     setStartDate(null);
     setEndDate(null);
     setLocation("");
     setType("");
     setDescription("");
+    setStartTime(null);
+    setEndTime(null);
   };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
+      resetAlert();
+
+      if (!startDate || !endDate || !location || !type || !description) {
+        setAlertMessage("Tüm alanları doldurunuz!");
+        setAlertVisible(true);
+        return;
+      }
       const newId = uuidv4();
 
       const body = {
@@ -55,6 +74,8 @@ function Form({ onDataSubmit }: FormProps) {
         perm_location: location,
         perm_type: type,
         description: description,
+        startTime: startTime?.toISOString(),
+        endTime: endTime?.toISOString(),
         posting_date: dayjs().toISOString(),
       };
       const response = await fetch("http://localhost:8000/date/request", {
@@ -64,8 +85,11 @@ function Form({ onDataSubmit }: FormProps) {
       });
 
       if (response.ok) {
+        setSuccessMessage("Kayıt başarıyla eklendi.");
+        setSuccessVisible(true);
+
         console.log("Kayıt başarıyla eklendi.");
-        alert ("Kayıt başarıyla eklendi.");
+        alert("Kayıt başarıyla eklendi.");
 
         onDataSubmit();
         resetForm();
@@ -77,18 +101,47 @@ function Form({ onDataSubmit }: FormProps) {
       console.log("Kayıt eklenirken bir hata oluştu.");
     }
   };
-
+  const resetAlert = () => {
+    setAlertVisible(false);
+    setAlertMessage("");
+  };
+  const resetSuccess = () => {
+    setSuccessVisible(false);
+    setSuccessMessage("");
+  };
   return (
     <div>
+      {alertVisible && (
+        <Alert
+          message={alertMessage}
+          type="error"
+          showIcon
+          closable
+          onClose={resetAlert}
+          style={{ marginBottom: "16px" }}
+        />
+      )}
+    <Snackbar
+        open={successVisible}
+        autoHideDuration={6000}
+        onClose={resetSuccess}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={resetSuccess}
+          severity="success"
+        >
+          {successMessage}
+        </MuiAlert>
+      </Snackbar>
       <form onSubmit={onSubmit}>
-               <div
+        <div
           style={{
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "flex-start",
-            width: "450px",
-            height: "450px",
             gap: "40px",
             marginLeft: "20px",
             marginTop: "40px",
@@ -99,7 +152,7 @@ function Form({ onDataSubmit }: FormProps) {
               {"Tarih Aralığını Seçiniz:"}
             </div>
             <Space direction="horizontal" size={12}>
-              <DatePicker placeholder="Başlangıç" onChange={onChangeDate} onOk={onOk} />
+              <DatePicker placeholder="Başlangıç" onChange={onChangeDate} />
               <DatePicker placeholder="Bitiş" onChange={onChangeDate} />
             </Space>
           </div>
@@ -153,12 +206,29 @@ function Form({ onDataSubmit }: FormProps) {
                   label: "Evlilik izni",
                 },
                 {
-                  value: "Günlük izin",
-                  label: "Günlük izin",
+                  value: "Saatlik izin",
+                  label: "Saatlik izin",
                 },
               ]}
             />
           </div>
+          {selectedType === "Saatlik izin" && (
+            <div className="time">
+              <div style={{ marginBottom: "5px", color: "navy", gap: "20px" }}>
+                {"Saat Seçiniz:"}
+              </div>
+              <TimePicker
+                placeholder="Başlama Saati"
+                onChange={(time) => setStartTime(time)}
+                style={{ width: "20ch", marginRight: "12px" }}
+              />
+              <TimePicker
+                placeholder="Bitiş Saati"
+                onChange={(time) => setEndTime(time)}
+                style={{ width: "20ch" }}
+              />
+            </div>
+          )}
           <div className="description">
             <div style={{ marginBottom: "5px", color: "navy" }}>
               {"Açıklama:"}
@@ -172,6 +242,7 @@ function Form({ onDataSubmit }: FormProps) {
               style={{ width: "40ch" }}
             />
           </div>
+
           <Button type="primary" style={{ width: "40ch" }} onClick={onSubmit}>
             {"Gönder"}
           </Button>

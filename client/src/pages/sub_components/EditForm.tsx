@@ -148,8 +148,8 @@ function EditForm({ data, onDataEdit }: EditFormProps) {
                     label: "Evlilik izni",
                   },
                   {
-                    value: "Günlük izin",
-                    label: "Günlük izin",
+                    value: "Saatlik izin",
+                    label: "Saatlik izin",
                   },
                 ]}
                 value={type}

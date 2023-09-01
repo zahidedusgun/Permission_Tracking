@@ -3,7 +3,6 @@ import { Table as AntTable, Tag, Button, Popconfirm } from "antd";
 import dayjs from "dayjs";
 import EditForm from "./EditForm";
 import "./general.css";
-import { Header } from "antd/es/layout/layout";
 
 interface TableProps {
   refreshData: boolean;
@@ -19,8 +18,17 @@ function Table({ refreshData }: TableProps) {
     perm_type: string[];
     description: string;
     posting_date: string;
+    startTime?: string;
+    endTime?: string;
   }
-
+  const permissionTypeColors: Record<string, string> = {
+    "Saatlik izin": "red",
+    "Yıllık izin": "orange",
+    "Ücretsiz izin": "purple",
+    "Evlilik izni": "magenta",
+    "Doğum izni": "pink",
+    "Raporlu izin": "lime",
+  };
   const columns = [
     {
       title: "Başlangıç Tarihi",
@@ -39,7 +47,7 @@ function Table({ refreshData }: TableProps) {
       render: (tags: string[]) => (
         <>
           {tags.map((tag) => (
-            <Tag color="blue" key={tag}>
+            <Tag color={permissionTypeColors[tag]} key={tag}>
               {tag}
             </Tag>
           ))}
@@ -61,9 +69,81 @@ function Table({ refreshData }: TableProps) {
     },
   ];
 
+  const expandedRowRender = (record: DataType) => (
+    <div
+      style={{
+        backgroundColor: "white",
+        padding: "10px",
+        borderRadius: "5px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        height: "100%",
+        borderLeft: "10px solid navy",
+        marginLeft: "10px",
+      }}
+    >
+      <div>
+        <div>
+          <h3 style={{ color: "navy", fontSize: "14px" }}>Açıklama:</h3>
+          <p style={{ margin: 0, fontSize: "12px" }}>{record.description}</p>
+        </div>
+      </div>
+      <div>
+        <div>
+          <h3 style={{ color: "navy", fontSize: "14px" }}>Lokasyon:</h3>
+          <p style={{ margin: 0, fontSize: "12px" }}>{record.location}</p>
+        </div>
+        {record.endTime && (
+          <div>
+            <h3 style={{ color: "navy", fontSize: "14px" }}>Bitiş Saati:</h3>
+            <p style={{ margin: 0, fontSize: "12px" }}>
+              {dayjs(record.endTime).format("HH:mm")}
+            </p>
+          </div>
+        )}
+        {record.startTime && record.endTime && (
+          <div>
+            <h3 style={{ color: "navy", fontSize: "14px" }}>Saatlik İzin:</h3>
+            <p style={{ margin: 0, fontSize: "12px" }}>
+              {dayjs(record.startTime).format("HH:mm")} -{" "}
+              {dayjs(record.endTime).format("HH:mm")}
+            </p>
+          </div>
+        )}
+      </div>
+      <div
+        className="button-container"
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginTop: "10px",
+        }}
+      >
+        <Popconfirm
+          title="Emin misiniz?"
+          onConfirm={() => handleDelete(record.id)}
+          okText="Evet"
+          cancelText="Hayır"
+        >
+          <Button
+            type="link"
+            className="delete-button"
+            style={{ marginRight: "10px" }}
+          >
+            İptal Et
+          </Button>
+        </Popconfirm>
+        <EditForm data={record} onDataEdit={getRequests} />
+      </div>
+    </div>
+  );
+  
+
   const [data, setData] = useState<DataType[]>([]);
 
-  async function getRequests() {
+  async function 
+  getRequests() {
     try {
       const response = await fetch("http://localhost:8000/date/request");
       const jsonData = await response.json();
@@ -81,17 +161,14 @@ function Table({ refreshData }: TableProps) {
           : [],
         posting_date: dayjs(data.posting_date).format("YYYY-MM-DD"),
         description: data.description,
+        startTime: data.startTime,
+        endTime: data.endTime,
       }));
-
       setData(transformedData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   }
-
-  useEffect(() => {
-    getRequests();
-  }, [refreshData]);
 
   async function handleDelete(id: string) {
     try {
@@ -111,6 +188,10 @@ function Table({ refreshData }: TableProps) {
     }
   }
 
+  useEffect(() => {
+    getRequests();
+  }, [refreshData]);
+
   return (
     <>
       <div
@@ -129,43 +210,7 @@ function Table({ refreshData }: TableProps) {
         dataSource={data}
         style={{ marginTop: "30px" }}
         expandable={{
-          expandedRowRender: (record) => (
-            <div>
-              <div>
-                <h3 style={{ color: "navy", fontSize: "14px" }}>Açıklama:</h3>
-                <p style={{ margin: 0, fontSize: "12px" }}>
-                  {record.description}
-                </p>
-                <hr style={{ margin: "5px 0" }} />
-                <h3 style={{ color: "navy", fontSize: "14px" }}>Lokasyon:</h3>
-                <p style={{ margin: 0, fontSize: "12px" }}>{record.location}</p>
-              </div>
-              <div
-                className="button-container"
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  marginTop: "10px",
-                }}
-              >
-                <Popconfirm
-                  title="Emin misiniz?"
-                  onConfirm={() => handleDelete(record.id)}
-                  okText="Evet"
-                  cancelText="Hayır"
-                >
-                  <Button
-                    type="link"
-                    className="delete-button"
-                    style={{ marginRight: "10px" }}
-                  >
-                    İptal Et
-                  </Button>
-                </Popconfirm>
-                <EditForm data={record} onDataEdit={getRequests} />
-              </div>
-            </div>
-          ),
+          expandedRowRender,
           rowExpandable: (record) => {
             return record.description !== "";
           },

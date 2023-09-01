@@ -2,13 +2,12 @@ import React, { Fragment, useState, ChangeEvent, FormEvent } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Login.css";
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
+import { TextField } from "@mui/material";
 import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
-import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.min.css"; 
 import { Link } from "react-router-dom";
 import EmailIcon from "@mui/icons-material/Email";
-import { toast } from "react-toastify";
 
 interface LoginProps {
   setAuth: (value: boolean) => void;
@@ -40,10 +39,9 @@ const Login: React.FC<LoginProps> = ({ setAuth }) => {
       if (parseRes.jwtToken) {
         localStorage.setItem("token", parseRes.jwtToken);
         setAuth(true);
-        toast.success("Logged in Successfully");
       } else {
         setAuth(false);
-        toast.error(parseRes);
+        
       }
     } catch (err) {
       console.error((err as Error).message);
