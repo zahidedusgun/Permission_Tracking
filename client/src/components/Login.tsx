@@ -1,25 +1,30 @@
-import React, { Fragment, useState, ChangeEvent, FormEvent } from "react";
+import React, {
+  Fragment,
+  useState,
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Login.css";
 import Box from "@mui/material/Box";
 import { TextField } from "@mui/material";
 import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
-import "bootstrap/dist/css/bootstrap.min.css"; 
-import { Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 import EmailIcon from "@mui/icons-material/Email";
 
 interface LoginProps {
   setAuth: (value: boolean) => void;
+  setRole: (value: string) => void;
 }
 
-const Login: React.FC<LoginProps> = ({ setAuth }) => {
+const Login: React.FC<LoginProps> = ({ setAuth, setRole }) => {
   const [inputs, setInputs] = useState({
-    email: "",
+    username: "",
     password: "",
   });
-
-  const { email, password } = inputs;
+  const { username, password } = inputs;
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -28,24 +33,24 @@ const Login: React.FC<LoginProps> = ({ setAuth }) => {
   const onSubmitForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const body = { email, password };
+      const body = { username, password };
       const response = await fetch("http://localhost:8000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
       const parseRes = await response.json();
-
-      if (parseRes.jwtToken) {
-        localStorage.setItem("token", parseRes.jwtToken);
-        setAuth(true);
-      } else {
-        setAuth(false);
-        
-      }
+      localStorage.setItem("token", parseRes.token);
+      console.log(parseRes.user.role);
+      setRole(parseRes.user.role);
+      setAuth(true);
+      console.log(username);
+      console.log(password);
     } catch (err) {
       console.error((err as Error).message);
     }
+    console.log("Login içerisinde");
+    
   };
 
   return (
@@ -75,14 +80,16 @@ const Login: React.FC<LoginProps> = ({ setAuth }) => {
                 >
                   <EmailIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
                   <TextField
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={onChange}
+                    type="username"
+                    name="username"
                     id="input-with-sx"
-                    label="Email Giriniz"
+                    label="Kullanıcı Adınızı Giriniz"
                     variant="standard"
                     className="input"
+                    value={username}
+                    onChange={(e) =>
+                      onChange(e as React.ChangeEvent<HTMLInputElement>)
+                    }
                   />
                 </Box>
                 <Box
@@ -98,19 +105,20 @@ const Login: React.FC<LoginProps> = ({ setAuth }) => {
                   <TextField
                     type="password"
                     name="password"
-                    value={password}
-                    onChange={onChange}
                     id="input-with-sx"
                     label="Şifrenizi Giriniz"
                     variant="standard"
                     className="input"
+                    value={password}
+                    onChange={(e) =>
+                      onChange(e as React.ChangeEvent<HTMLInputElement>)
+                    }
                   />
                 </Box>
                 <div className="buttons">
                   <button className="login-button" type="submit">
                     Giriş <LoginOutlinedIcon />
                   </button>
-                  Kayıt olmak için <Link to="/register">tıklayınız</Link>
                 </div>
               </form>
             </div>

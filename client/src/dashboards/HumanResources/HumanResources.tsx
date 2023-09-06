@@ -1,7 +1,12 @@
 import React from "react";
 import HMSidenav from "./HMSidenav";
 
-function HumanResources() {
+interface HumanResourcesProps {
+  setAuth: (value: boolean) => void;
+}
+
+
+const HumanResources: React.FC<HumanResourcesProps>=({setAuth}) =>{
   return (
     <div>
       <HMSidenav />

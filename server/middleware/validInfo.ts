@@ -2,9 +2,6 @@ import { Request, Response, NextFunction } from "express";
 
 module.exports = function (req: Request, res: Response, next: NextFunction) {
   const { username, password } = req.body;
-  console.log("username: ", username);
-
-  
 
   if (req.path === "/register") {
     console.log(!username.length);

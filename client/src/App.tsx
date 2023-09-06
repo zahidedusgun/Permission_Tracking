@@ -1,46 +1,59 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import "./App.css";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
-import Register from "./components/Register";
-import { Link } from "react-router-dom";
+import Dashboard from "./components/Dashboard";
 import HumanResources from "./dashboards/HumanResources/HumanResources";
-import Leader from "./dashboards/Leader";
-import Employee from "./dashboards/Employee";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState("");
 
   const setAuth = (boolean: boolean) => {
     setIsAuthenticated(boolean);
   };
+  async function isAuth() {
+    try {
+      const response = await fetch("http://localhost:8000/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      const parseRes = await response.json();
+      console.log("rol", parseRes.user.role);
 
+      localStorage.setItem("token", parseRes.token);
+      console.log(parseRes.user.role);
+
+      setAuth(true);
+    } catch (err) {
+      console.error((err as Error).message);
+    }
+  }
   return (
     <Fragment>
       <Routes>
         <Route
-          path="/"
-          element={
-            <div className="button-container">
-              <div className="center-buttons">
-                <Link to="/human-resources" className="btn btn-primary">
-                  İnsan Kaynakları
-                </Link>
-                <Link to="/team-leader" className="btn btn-success">
-                  Ekip Lideri
-                </Link>
-                <Link to="/employee" className="btn btn-info">
-                  Çalışan Girişleri
-                </Link>
-              </div>
-            </div>
-          }
-        />
-        <Route
-          path="/dashboard"
+          path="/login"
           element={
             !isAuthenticated ? (
+              <Login setAuth={setAuth} setRole={setUserRole} />
+            ) : // Kullanıcı rolüne göre yönlendirme yap
+            userRole === "leader" ? (
+              <Navigate to="/leader" />
+            ) : userRole === "employee" ? (
+              <Navigate to="/dashboard" />
+            ) : userRole === "admin" ? (
+              <Navigate to="/human-resources" />
+            ) : (
+              <Navigate to="/default" />
+            )
+          }
+        />
+
+        <Route
+          path={"/dashboard"}
+          element={
+            isAuthenticated ? (
               <Dashboard setAuth={setAuth} />
             ) : (
               <Navigate to="/login" />
@@ -48,18 +61,15 @@ function App() {
           }
         />
         <Route
-          path="/login"
+          path={"/human-resources"}
           element={
-            !isAuthenticated ? (
-              <Login setAuth={setAuth} />
+            isAuthenticated ? (
+              <HumanResources setAuth={setAuth} />
             ) : (
-              <Navigate to="/dashboard" />
+              <Navigate to="/login" />
             )
           }
         />
-        <Route path="/human-resources" element={<HumanResources />} />
-        <Route path="/team-leader" element={<Leader />} />
-        <Route path="/employee" element={<Employee />} />
       </Routes>
     </Fragment>
   );

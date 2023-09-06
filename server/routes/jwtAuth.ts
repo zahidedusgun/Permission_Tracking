@@ -70,12 +70,31 @@ router.post("/login", validInfo, async (req: Request, res: Response) => {
 
     const token = jwtGenerator(user.rows[0].id);
 
-    res.json({ token });
+    res.json({ user: user.rows[0], token });
   } catch (err) {
     console.error((err as Error).message);
     res.status(500).send("Server error");
   }
 });
+
+router.get("/login", validInfo, async (req: Request, res: Response) => {
+  try {
+    const { username} = req.body;
+
+    const user = await pool.query(
+      "SELECT * FROM users WHERE username = $1 ",
+      [username]
+    );
+    const token = jwtGenerator(user.rows[0].id);
+     console.log(user)
+    res.json({ token });
+   
+  } catch (err) {
+    console.error((err as Error).message);
+    res.status(500).send("Server error");
+  }
+});
+
 
 router.get("/is-verify", authorization, async (req: Request, res: Response) => {
   try {

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Table as AntTable, Tag, Popconfirm } from "antd";
+import dayjs from "dayjs";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-function HMHome() {
+function HMRequests() {
   interface DataType {
     id: any;
     key: string;
@@ -79,38 +80,38 @@ function HMHome() {
   const [data, setData] = useState<DataType[]>([]);
 
   useEffect(() => {
-    // getRequests();
+    getRequests();
   }, []);
 
-  // async function getRequests() {
-  //   try {
-  //     const response = await fetch("http://localhost:8000/date/request", {
-  //       method: "GET",
-  //     });
-  //     const jsonData = await response.json();
+  async function getRequests() {
+    try {
+      const response = await fetch("http://localhost:8000/date/request", {
+        method: "GET",
+      });
+      const jsonData = await response.json();
 
-  //     const transformedData = jsonData.map((data: any) => ({
-  //       id: data.id,
-  //       key: data.id,
-  //       start: dayjs(data.start_date).format("YYYY-MM-DD"),
-  //       end: dayjs(data.end_date).format("YYYY-MM-DD"),
-  //       location: data.perm_location,
-  //       perm_type: Array.isArray(data.perm_type)
-  //         ? data.perm_type.join(", ")
-  //         : data.perm_type
-  //         ? [data.perm_type]
-  //         : [],
-  //       posting_date: dayjs(data.posting_date).format("YYYY-MM-DD"),
-  //       description: data.description,
-  //       accepting: data.accepting, // assuming you have an 'accepting' field in your data
-  //       rejection: data.rejection, // assuming you have a 'rejection' field in your data
-  //     }));
+      const transformedData = jsonData.map((data: any) => ({
+        id: data.id,
+        key: data.id,
+        start: dayjs(data.start_date).format("YYYY-MM-DD"),
+        end: dayjs(data.end_date).format("YYYY-MM-DD"),
+        location: data.perm_location,
+        perm_type: Array.isArray(data.perm_type)
+          ? data.perm_type.join(", ")
+          : data.perm_type
+          ? [data.perm_type]
+          : [],
+        posting_date: dayjs(data.posting_date).format("YYYY-MM-DD"),
+        description: data.description,
+        accepting: data.accepting, // assuming you have an 'accepting' field in your data
+        rejection: data.rejection, // assuming you have a 'rejection' field in your data
+      }));
 
-  //     setData(transformedData);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // }
+      setData(transformedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   //iptal kısmını buraya taşı!!!
   //   async function handleDelete(id: string) {
@@ -142,7 +143,7 @@ function HMHome() {
           marginTop: "85px",
         }}
       >
-        Kabul Edilen Talepler{" "}
+        Genel İzin Talepleri
       </div>
 
       <AntTable
@@ -172,4 +173,4 @@ function HMHome() {
   );
 }
 
-export default HMHome;
+export default HMRequests;

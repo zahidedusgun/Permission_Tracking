@@ -22,6 +22,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import BadgeIcon from '@mui/icons-material/Badge';
 import HMHome from "./HMHome";
 import HMEmployee from "./HMEmployee";
+import HMRequests from "./HMRequests";
 // import Profile from ".../pages/sub_components/Profile";
 // import Requests from "../pages/Requests";
 
@@ -259,7 +260,7 @@ export default function HMSidenav() {
         <Divider />
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        {/* {menuData === "Requests" && <Requests />} */}
+        {menuData === "Requests" && <HMRequests />}
         {menuData === "Home" && <HMHome />}
         {menuData === "HMEmployee" && <HMEmployee />}
         {/* {menuData === "Profile" && <Profile />} */}
